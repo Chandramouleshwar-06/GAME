@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add any custom CSS here below the @tailwind directives if needed, but Tailwind classes are preferred for styling */
+body {
+  font-family: 'Inter', sans-serif; /* Example: Apply Inter font globally */
+}
