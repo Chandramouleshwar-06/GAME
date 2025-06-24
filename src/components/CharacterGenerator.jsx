@@ -1,22 +1,20 @@
-// src/components/CharacterGenerator.jsx
 import React, { useRef, useCallback } from 'react';
-import { ScrollText } from 'lucide-react';
+import { ScrollText, Sparkles, Wand2 } from 'lucide-react';
 import {
   races, abilities, weaponYesNo, weaponTypes, weaponGrades, weaponMasteries,
   specialAbilityYesNo, specialAbilities, fatalFlaws, statNames, steps
-} from '../gameData.js'; // Explicit .js extension
-import { randomInt, weightedRandom } from '../utils/helpers.js'; // Explicit .js extension
+} from '../gameData.js';
+import { randomInt, weightedRandom } from '../utils/helpers.js';
 
 const CharacterGenerator = ({
   characterName,
   spinning,
-  setSpinning, // Added to control spinning state directly
-  setCurrentSpinResult, // Now receives the setter for App's currentSpinResult state
+  setSpinning,
+  setCurrentSpinResult,
   instruction,
-  spinLabelRef, // The ref object from App.jsx
-  onStartGeneration // Callback to handle character generation initiation
+  spinLabelRef,
+  onStartGeneration
 }) => {
-  // Ref for animation frame ID, not for displaying result
   const currentSpinAnimationFrame = useRef(null);
 
   const animateWheel = useCallback((options, resolve) => {
@@ -29,26 +27,25 @@ const CharacterGenerator = ({
       if (frame < spinDuration) {
         const displayedResult = allOptions[currentDisplayIndex];
         
-        // Directly update the DOM element for smooth animation without triggering many React renders
-        if (spinLabelRef.current) { // Ensure spinLabelRef.current is a DOM element
+        if (spinLabelRef.current) {
           spinLabelRef.current.textContent = displayedResult;
           spinLabelRef.current.style.transform = `scale(1.1) rotate(${frame * 30}deg)`;
           spinLabelRef.current.style.color = `hsl(${frame * 10 % 360}, 100%, 70%)`;
+          spinLabelRef.current.style.textShadow = `0 0 ${10 + frame % 20}px rgba(255, 215, 0, 0.8)`;
         }
         currentDisplayIndex = (currentDisplayIndex + 1) % allOptions.length;
         frame++;
         currentSpinAnimationFrame.current = requestAnimationFrame(animate);
       } else {
         cancelAnimationFrame(currentSpinAnimationFrame.current);
-        const finalResult = allOptions[randomInt(0, allOptions.length - 1)]; // Final random pick
+        const finalResult = allOptions[randomInt(0, allOptions.length - 1)];
         
-        // Update the main App's state with the final result
-        setCurrentSpinResult(finalResult); 
-        // Directly update DOM element one last time for finality
-        if (spinLabelRef.current) { // Ensure spinLabelRef.current is a DOM element
+        setCurrentSpinResult(finalResult);
+        if (spinLabelRef.current) {
           spinLabelRef.current.textContent = finalResult;
           spinLabelRef.current.style.transform = 'scale(1.0) rotate(0deg)';
-          spinLabelRef.current.style.color = '#ffd369';
+          spinLabelRef.current.style.color = '#FFD700';
+          spinLabelRef.current.style.textShadow = '0 0 20px rgba(255, 215, 0, 1)';
           spinLabelRef.current.classList.add('animate-pop-in');
           setTimeout(() => spinLabelRef.current.classList.remove('animate-pop-in'), 500);
         }
@@ -56,7 +53,7 @@ const CharacterGenerator = ({
       }
     };
     currentSpinAnimationFrame.current = requestAnimationFrame(animate);
-  }, [setCurrentSpinResult, spinLabelRef]); // Add spinLabelRef to dependencies
+  }, [setCurrentSpinResult, spinLabelRef]);
 
   const animateStats = useCallback((currentCharacter, resolveStep) => {
     let statTargets = {};
@@ -78,9 +75,11 @@ const CharacterGenerator = ({
     const animateSingleStat = () => {
       if (animatedStatIndex >= statNames.length) {
         currentCharacter.Stats = currentStats;
-        setCurrentSpinResult("All Stats Finalized!"); // Update App's state
-        if (spinLabelRef.current) { // Ensure spinLabelRef.current is a DOM element
-          spinLabelRef.current.textContent = "All Stats Finalized!"; // Direct DOM update
+        setCurrentSpinResult("All Stats Forged!");
+        if (spinLabelRef.current) {
+          spinLabelRef.current.textContent = "All Stats Forged!";
+          spinLabelRef.current.style.color = '#FFD700';
+          spinLabelRef.current.style.textShadow = '0 0 25px rgba(255, 215, 0, 1)';
           spinLabelRef.current.classList.add('animate-pop-in');
           setTimeout(() => spinLabelRef.current.classList.remove('animate-pop-in'), 500);
         }
@@ -97,9 +96,11 @@ const CharacterGenerator = ({
           current += randomInt(2, 6);
           if (current > target) current = target;
           currentStats[stat] = current;
-          setCurrentSpinResult(`${stat}: ${current}`); // Update App's state
-          if (spinLabelRef.current) { // Ensure spinLabelRef.current is a DOM element
-            spinLabelRef.current.textContent = `${stat}: ${current}`; // Direct DOM update
+          setCurrentSpinResult(`${stat}: ${current}`);
+          if (spinLabelRef.current) {
+            spinLabelRef.current.textContent = `${stat}: ${current}`;
+            spinLabelRef.current.style.color = `hsl(${(current / 100) * 120}, 100%, 70%)`;
+            spinLabelRef.current.style.textShadow = `0 0 15px rgba(255, 215, 0, 0.8)`;
           }
           currentSpinAnimationFrame.current = setTimeout(updateStatVisual, 60);
         } else {
@@ -112,41 +113,73 @@ const CharacterGenerator = ({
     };
 
     animateSingleStat();
-  }, [setCurrentSpinResult, spinLabelRef]); // Add spinLabelRef to dependencies
+  }, [setCurrentSpinResult, spinLabelRef]);
 
   const handleStartGeneration = async () => {
-    // Pass the animation functions and refs to the parent's `onStartGeneration` handler
     await onStartGeneration({
       animateWheel,
       animateStats,
-      setSpinning // Pass setSpinning down if character generation logic needs to manage it
+      setSpinning
     });
   };
 
   return (
     <>
-      <p className="text-xl text-center text-purple-200 mb-6 flex items-center justify-center gap-2">
-        <ScrollText size={24} className="text-pink-400" />
-        {instruction}
-      </p>
-
-      <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl p-6 text-center shadow-inner border border-gray-600 mb-8 overflow-hidden">
-        {/* Attach the ref directly to the p element */}
-        <p ref={spinLabelRef} className="text-5xl font-bold text-yellow-400 tracking-wide font-mono transition-all duration-75 ease-linear">
-          {setCurrentSpinResult}
+      <div className="text-center mb-8">
+        <p className="text-2xl text-mystical-silver mb-6 flex items-center justify-center gap-3 font-serif">
+          <ScrollText size={28} className="text-mystical-gold animate-magical-float" />
+          {instruction}
+          <Wand2 size={28} className="text-mystical-purple animate-magical-float" style={{animationDelay: '1s'}} />
         </p>
+      </div>
+
+      <div className="bg-gradient-to-br from-fantasy-dark via-mystical-purple/20 to-fantasy-dark rounded-3xl p-8 text-center shadow-inner border-2 border-mystical-gold/30 mb-8 overflow-hidden relative">
+        {/* Magical background effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-mystical-gold/10 to-transparent animate-pulse"></div>
+        
+        <div className="relative z-10">
+          <div className="mb-4">
+            <Sparkles size={32} className="text-mystical-gold mx-auto animate-sparkle" />
+          </div>
+          
+          <p ref={spinLabelRef} className="text-6xl font-bold text-mystical-gold tracking-wide font-fantasy transition-all duration-75 ease-linear min-h-[80px] flex items-center justify-center animate-glow">
+            {spinning ? "✨ Weaving Fate ✨" : "Ready to Begin"}
+          </p>
+          
+          <div className="mt-4">
+            <Sparkles size={24} className="text-mystical-silver mx-auto animate-sparkle" style={{animationDelay: '1s'}} />
+          </div>
+        </div>
       </div>
 
       <button
         onClick={handleStartGeneration}
         disabled={spinning || !characterName.trim()}
-        className={`w-full py-4 rounded-xl text-2xl font-bold transition-all duration-300 shadow-lg
+        className={`w-full py-6 rounded-xl text-3xl font-bold transition-all duration-300 shadow-lg font-fantasy border-2 relative overflow-hidden
           ${spinning || !characterName.trim()
-            ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-            : 'bg-gradient-to-r from-pink-600 to-red-700 hover:from-pink-700 hover:to-red-800 text-white transform hover:scale-105 active:scale-95'
+            ? 'bg-gray-600 text-gray-400 cursor-not-allowed border-gray-500'
+            : 'bg-gradient-to-r from-mystical-purple via-fantasy-magic to-mystical-purple hover:from-mystical-gold hover:via-mystical-silver hover:to-mystical-gold text-white transform hover:scale-105 active:scale-95 border-mystical-gold shadow-mystical-gold/50 hover:shadow-xl'
           }`}
       >
-        {spinning ? 'Spinning...' : 'Spin Character'}
+        <div className="relative z-10 flex items-center justify-center gap-3">
+          {spinning ? (
+            <>
+              <Wand2 size={32} className="animate-spin" />
+              Forging Your Destiny...
+              <Sparkles size={32} className="animate-pulse" />
+            </>
+          ) : (
+            <>
+              <Sparkles size={32} className="animate-magical-float" />
+              Begin Your Legend
+              <Wand2 size={32} className="animate-magical-float" style={{animationDelay: '0.5s'}} />
+            </>
+          )}
+        </div>
+        
+        {!spinning && !(!characterName.trim()) && (
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 translate-x-[-100%] animate-pulse"></div>
+        )}
       </button>
     </>
   );
