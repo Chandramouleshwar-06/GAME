@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+<<<<<<< HEAD
 export default {
   content: [
     "./index.html",
@@ -30,3 +31,15 @@ export default {
   },
   plugins: [],
 }
+=======
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // Scan all JS/JSX/TS/TSX files in src
+    "./public/index.html",         // And your main HTML file
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+>>>>>>> 427e00c43f05f175a55dde03cd6b245728f60d31
