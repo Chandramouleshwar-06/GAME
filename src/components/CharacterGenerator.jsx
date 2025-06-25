@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { ScrollText, Sparkles, Wand2 } from 'lucide-react';
+import { ScrollText, Sparkles, Wand2, Crown } from 'lucide-react';
 import {
   races, abilities, weaponYesNo, weaponTypes, weaponGrades, weaponMasteries,
   specialAbilityYesNo, specialAbilities, fatalFlaws, statNames, steps
@@ -46,8 +46,8 @@ const CharacterGenerator = ({
           spinLabelRef.current.style.transform = 'scale(1.0) rotate(0deg)';
           spinLabelRef.current.style.color = '#FFD700';
           spinLabelRef.current.style.textShadow = '0 0 20px rgba(255, 215, 0, 1)';
-          spinLabelRef.current.classList.add('animate-pop-in');
-          setTimeout(() => spinLabelRef.current.classList.remove('animate-pop-in'), 500);
+          spinLabelRef.current.classList.add('animate-bounce');
+          setTimeout(() => spinLabelRef.current.classList.remove('animate-bounce'), 500);
         }
         resolve(finalResult);
       }
@@ -80,8 +80,8 @@ const CharacterGenerator = ({
           spinLabelRef.current.textContent = "All Stats Forged!";
           spinLabelRef.current.style.color = '#FFD700';
           spinLabelRef.current.style.textShadow = '0 0 25px rgba(255, 215, 0, 1)';
-          spinLabelRef.current.classList.add('animate-pop-in');
-          setTimeout(() => spinLabelRef.current.classList.remove('animate-pop-in'), 500);
+          spinLabelRef.current.classList.add('animate-bounce');
+          setTimeout(() => spinLabelRef.current.classList.remove('animate-bounce'), 500);
         }
         resolveStep(currentCharacter);
         return;
@@ -124,64 +124,99 @@ const CharacterGenerator = ({
   };
 
   return (
-    <>
-      <div className="text-center mb-8">
-        <p className="text-2xl text-mystical-silver mb-6 flex items-center justify-center gap-3 font-serif">
-          <ScrollText size={28} className="text-mystical-gold animate-magical-float" />
-          {instruction}
-          <Wand2 size={28} className="text-mystical-purple animate-magical-float" style={{animationDelay: '1s'}} />
-        </p>
+    <div className="space-y-8">
+      {/* Instruction Section */}
+      <div className="text-center">
+        <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+            <ScrollText size={24} className="text-white" />
+          </div>
+          <p className="text-2xl lg:text-3xl text-amber-200 font-serif italic">
+            {instruction}
+          </p>
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-lg">
+            <Wand2 size={24} className="text-white animate-pulse" />
+          </div>
+        </div>
       </div>
 
-      <div className="bg-gradient-to-br from-fantasy-dark via-mystical-purple/20 to-fantasy-dark rounded-3xl p-8 text-center shadow-inner border-2 border-mystical-gold/30 mb-8 overflow-hidden relative">
+      {/* Fate Wheel */}
+      <div className="bg-gradient-to-br from-slate-800/50 via-purple-900/30 to-slate-800/50 rounded-3xl p-12 text-center shadow-2xl border border-amber-500/30 backdrop-blur-sm relative overflow-hidden">
         {/* Magical background effects */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-mystical-gold/10 to-transparent animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/5 to-transparent animate-pulse"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5"></div>
         
         <div className="relative z-10">
-          <div className="mb-4">
-            <Sparkles size={32} className="text-mystical-gold mx-auto animate-sparkle" />
+          {/* Decorative elements */}
+          <div className="flex items-center justify-center gap-8 mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-xl">
+              <Sparkles size={32} className="text-white animate-spin-slow" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-3xl font-bold text-amber-400 font-fantasy mb-2">Wheel of Destiny</h3>
+              <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+            </div>
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl">
+              <Crown size={32} className="text-white animate-pulse" />
+            </div>
           </div>
           
-          <p ref={spinLabelRef} className="text-6xl font-bold text-mystical-gold tracking-wide font-fantasy transition-all duration-75 ease-linear min-h-[80px] flex items-center justify-center animate-glow">
-            {spinning ? "✨ Weaving Fate ✨" : "Ready to Begin"}
-          </p>
+          {/* Main display */}
+          <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 rounded-2xl p-8 border border-amber-400/50 shadow-inner mb-8">
+            <p ref={spinLabelRef} className="text-5xl lg:text-6xl font-bold text-amber-400 tracking-wide font-fantasy transition-all duration-75 ease-linear min-h-[80px] flex items-center justify-center drop-shadow-lg">
+              {spinning ? "✨ Weaving Fate ✨" : "Ready to Begin"}
+            </p>
+          </div>
           
-          <div className="mt-4">
-            <Sparkles size={24} className="text-mystical-silver mx-auto animate-sparkle" style={{animationDelay: '1s'}} />
+          {/* Decorative sparkles */}
+          <div className="flex justify-center gap-4">
+            <Sparkles size={24} className="text-purple-400 animate-pulse" />
+            <Sparkles size={32} className="text-amber-400 animate-pulse" style={{animationDelay: '0.5s'}} />
+            <Sparkles size={24} className="text-blue-400 animate-pulse" style={{animationDelay: '1s'}} />
           </div>
         </div>
       </div>
 
-      <button
-        onClick={handleStartGeneration}
-        disabled={spinning || !characterName.trim()}
-        className={`w-full py-6 rounded-xl text-3xl font-bold transition-all duration-300 shadow-lg font-fantasy border-2 relative overflow-hidden
-          ${spinning || !characterName.trim()
-            ? 'bg-gray-600 text-gray-400 cursor-not-allowed border-gray-500'
-            : 'bg-gradient-to-r from-mystical-purple via-fantasy-magic to-mystical-purple hover:from-mystical-gold hover:via-mystical-silver hover:to-mystical-gold text-white transform hover:scale-105 active:scale-95 border-mystical-gold shadow-mystical-gold/50 hover:shadow-xl'
-          }`}
-      >
-        <div className="relative z-10 flex items-center justify-center gap-3">
-          {spinning ? (
-            <>
-              <Wand2 size={32} className="animate-spin" />
-              Forging Your Destiny...
-              <Sparkles size={32} className="animate-pulse" />
-            </>
-          ) : (
-            <>
-              <Sparkles size={32} className="animate-magical-float" />
-              Begin Your Legend
-              <Wand2 size={32} className="animate-magical-float" style={{animationDelay: '0.5s'}} />
-            </>
+      {/* Generate Button */}
+      <div className="text-center">
+        <button
+          onClick={handleStartGeneration}
+          disabled={spinning || !characterName.trim()}
+          className={`group px-12 py-6 rounded-2xl text-3xl font-bold transition-all duration-300 shadow-2xl font-fantasy border-2 relative overflow-hidden transform hover:scale-105 active:scale-95
+            ${spinning || !characterName.trim()
+              ? 'bg-slate-600 text-slate-400 cursor-not-allowed border-slate-500 shadow-none'
+              : 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-400 text-white border-amber-400 shadow-amber-500/50 hover:shadow-amber-400/75'
+            }`}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/20 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          
+          <div className="relative z-10 flex items-center justify-center gap-4">
+            {spinning ? (
+              <>
+                <Wand2 size={36} className="animate-spin" />
+                Forging Your Destiny...
+                <Sparkles size={36} className="animate-pulse" />
+              </>
+            ) : (
+              <>
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Sparkles size={24} className="animate-pulse" />
+                </div>
+                Begin Your Legend
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Wand2 size={24} className="animate-pulse" style={{animationDelay: '0.5s'}} />
+                </div>
+              </>
+            )}
+          </div>
+          
+          {/* Shimmer effect */}
+          {!spinning && !(!characterName.trim()) && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
           )}
-        </div>
-        
-        {!spinning && !(!characterName.trim()) && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 translate-x-[-100%] animate-pulse"></div>
-        )}
-      </button>
-    </>
+        </button>
+      </div>
+    </div>
   );
 };
 

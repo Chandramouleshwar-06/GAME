@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        serif: ['"Cinzel"', '"Playfair Display"', 'serif'],
-        fantasy: ['"Uncial Antiqua"', '"Cinzel"', 'serif'],
-        mono: ['"Space Mono"', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['"Playfair Display"', '"Georgia"', 'serif'],
+        fantasy: ['"Cinzel"', '"Playfair Display"', 'serif'],
+        mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
       },
       colors: {
         fantasy: {
@@ -59,8 +59,21 @@ export default {
           '50%': { opacity: '1', transform: 'scale(1)' },
         },
         'glow': {
-          '0%, 100%': { boxShadow: '0 0 5px rgba(157, 78, 221, 0.5)' },
-          '50%': { boxShadow: '0 0 20px rgba(157, 78, 221, 0.8), 0 0 30px rgba(157, 78, 221, 0.6)' },
+          '0%, 100%': { 
+            textShadow: '0 0 5px rgba(251, 191, 36, 0.5), 0 0 10px rgba(251, 191, 36, 0.3), 0 0 15px rgba(251, 191, 36, 0.2)' 
+          },
+          '50%': { 
+            textShadow: '0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.6), 0 0 30px rgba(251, 191, 36, 0.4)' 
+          },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+          '33%': { transform: 'translateY(-10px) rotate(120deg)' },
+          '66%': { transform: 'translateY(5px) rotate(240deg)' },
+        },
+        'spin-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         }
       },
       animation: {
@@ -68,7 +81,12 @@ export default {
         'pop-in': 'pop-in 0.3s ease-out forwards',
         'magical-float': 'magical-float 3s ease-in-out infinite',
         'sparkle': 'sparkle 2s ease-in-out infinite',
-        'glow': 'glow 2s ease-in-out infinite',
+        'glow': 'glow 3s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'spin-slow': 'spin-slow 8s linear infinite',
+      },
+      backdropBlur: {
+        xs: '2px',
       }
     },
   },
