@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollText, Sword, Target, Briefcase, Gem, Feather, Shield, Zap } from 'lucide-react';
+import { ScrollText, Sword, Target, Briefcase, Gem, Feather, Shield, Zap, Sparkles } from 'lucide-react';
 
 const GameActions = ({ generateQuests, startMockCombat, setShowInventoryModal }) => {
   return (

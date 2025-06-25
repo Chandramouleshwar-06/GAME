@@ -22,8 +22,6 @@ import InventoryModal from './components/InventoryModal.jsx';
 import CombatArena from './components/CombatArena.jsx';
 
 // Firebase configuration
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
 let firebaseConfig;
 if (typeof __firebase_config !== 'undefined') {
   firebaseConfig = JSON.parse(__firebase_config);
@@ -38,6 +36,9 @@ if (typeof __firebase_config !== 'undefined') {
     measurementId: "G-GPEJ7SH66S"
   };
 }
+
+// Use the projectId from firebaseConfig instead of a potentially undefined variable
+const appId = firebaseConfig.projectId;
 
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
